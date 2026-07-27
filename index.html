@@ -3,22 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="description" content="Elisei Barber — frizerie în Iași. Tunsoare clasică, barbă și styling cu atenție la detalii. Programează-te la +40 759 895 155.">
+<meta name="description" content="Elisei Barber — frizer independent în Iași. Tunsori personalizate, atenție 100% dedicată fiecărui client, programări flexibile telefonic sau pe WhatsApp.">
 <meta name="theme-color" content="#0b0a08">
-<title>Elisei Barber — Frizerie Iași | Programări</title>
+<title>Elisei Barber — Frizer Independent Iași | Programări</title>
+
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<meta property="og:type" content="business.business">
+<meta property="og:title" content="Elisei Barber — Frizer Independent Iași">
+<meta property="og:description" content="Tunsori personalizate, atenție la fiecare detaliu. Programări flexibile, telefonic sau pe WhatsApp.">
+<meta property="og:image" content="og-image.jpg">
+<meta property="og:locale" content="ro_RO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Elisei Barber — Frizer Independent Iași">
+<meta name="twitter:description" content="Tunsori personalizate, atenție la fiecare detaliu. Programări telefonic sau pe WhatsApp.">
+<meta name="twitter:image" content="og-image.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HairSalon",
+  "name": "Elisei Barber",
+  "description": "Frizer independent în Iași, lucrează pe bază de programare, telefonic sau pe WhatsApp.",
+  "telephone": "+40759895155",
+  "areaServed": "Iași, România",
+  "priceRange": "40 lei+",
+  "sameAs": [
+    "https://www.instagram.com/elisei.damian.90",
+    "https://www.tiktok.com/@eli_the_barber1"
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400&family=Inter:wght@300&family=Alex+Brush&display=swap" rel="stylesheet">
 <style>
 
   :root{
     --ink:#0b0a08;
     --ink2:#131110;
-    --ink3:#1a1712;
     --bone:#ece5d6;
     --gold:#b08d57;
     --gold-bright:#e0bb84;
-    --gold-dim:#8a6f47;
     --line: rgba(236,229,214,0.12);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -43,6 +71,11 @@
   }
   a{color:inherit;text-decoration:none;}
   ::selection{background:var(--gold); color:var(--ink);}
+  body{
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
+    -webkit-touch-callout:none;
+  }
+  img{ -webkit-user-drag:none; user-drag:none; }
 
   /* film grain overlay */
   .grain{
@@ -125,42 +158,101 @@
   @keyframes introFallbackHide{ to{ opacity:0; visibility:hidden; pointer-events:none; } }
   #intro.hide{ opacity:0; visibility:hidden; pointer-events:none; }
 
-  .signature-wrap{ position:relative; }
-  .signature{ width:min(78vw,380px); height:auto; overflow:visible; }
-  .signature path{
-    fill:none; stroke:var(--gold-bright);
-    stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round;
-    stroke-dasharray:1; stroke-dashoffset:1;
-    animation:writeIn 0.5s cubic-bezier(.65,.05,.36,1) forwards;
-    filter:drop-shadow(0 0 6px rgba(224,187,132,0.35));
+  .signature-wrap{ position:relative; display:inline-block; padding:20px 10px; }
+  .signature-wrap::before{
+    content:""; position:absolute; inset:-30% -10%; z-index:-1; border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(224,187,132,0.16), transparent 70%);
+    opacity:0; filter:blur(20px);
+    animation:glowBloom 2.6s ease-out 0.2s forwards;
   }
-  .signature path:nth-child(1){ animation-delay:0.25s; }
-  .signature path:nth-child(2){ animation-delay:0.55s; }
-  .signature path:nth-child(3){ animation-delay:0.82s; }
-  .signature path:nth-child(4){ animation-delay:0.95s; }
-  .signature path:nth-child(5){ animation-delay:1.10s; }
-  .signature path:nth-child(6){ animation-delay:1.42s; }
-  .signature path:nth-child(7){ animation-delay:1.72s; }
-  .signature path:nth-child(8){ animation-delay:1.85s; }
-  @keyframes writeIn{ to{ stroke-dashoffset:0; } }
+  @keyframes glowBloom{
+    0%{ opacity:0; transform:scale(0.85); }
+    50%{ opacity:1; transform:scale(1); }
+    100%{ opacity:0.55; transform:scale(1.05); }
+  }
+  .ink-touch{
+    position:absolute; top:52%; left:2%; width:4px; height:4px; border-radius:50%;
+    background:var(--gold-bright); transform:translate(-50%,-50%);
+    box-shadow:0 0 0 0 rgba(224,187,132,0.6);
+    opacity:0;
+    animation:inkTouch 0.5s ease-out 0.05s forwards;
+  }
+  @keyframes inkTouch{
+    0%{ opacity:0.9; box-shadow:0 0 0 0 rgba(224,187,132,0.6); }
+    100%{ opacity:0; box-shadow:0 0 0 14px rgba(224,187,132,0); }
+  }
+  .signature-text{
+    font-family:'Alex Brush', cursive;
+    font-size:clamp(4.2rem, 16vw, 7.5rem);
+    line-height:1;
+    color:var(--gold-bright);
+    white-space:nowrap;
+    filter:drop-shadow(0 2px 14px rgba(224,187,132,0.28));
+    clip-path:inset(0 100% 0 0);
+    animation:writeReveal 2.1s cubic-bezier(.65,.02,.28,1) 0.35s forwards,
+              inkSettle 1s ease-out 2.45s forwards;
+  }
+  @keyframes writeReveal{
+    0%{ clip-path:inset(0 100% 0 0); }
+    22%{ clip-path:inset(0 74% 0 0); }
+    30%{ clip-path:inset(0 66% 0 0); }
+    48%{ clip-path:inset(0 46% 0 0); }
+    55%{ clip-path:inset(0 40% 0 0); }
+    72%{ clip-path:inset(0 22% 0 0); }
+    80%{ clip-path:inset(0 14% 0 0); }
+    100%{ clip-path:inset(0 0 0 0); }
+  }
+  @keyframes inkSettle{
+    0%{ filter:drop-shadow(0 2px 14px rgba(224,187,132,0.28)) brightness(1); }
+    35%{ filter:drop-shadow(0 2px 26px rgba(224,187,132,0.55)) brightness(1.25); }
+    100%{ filter:drop-shadow(0 2px 14px rgba(224,187,132,0.28)) brightness(1); }
+  }
+  .pen-tip{
+    position:absolute; top:52%; left:0; width:8px; height:8px; border-radius:50%;
+    background:radial-gradient(circle, #fff 0%, var(--gold-bright) 45%, transparent 75%);
+    box-shadow:0 0 18px 6px rgba(224,187,132,0.5);
+    transform:translate(-50%,-50%) rotate(0deg);
+    animation:penMove 2.1s cubic-bezier(.65,.02,.28,1) 0.35s forwards;
+  }
+  .pen-trail{
+    position:absolute; top:52%; left:0; width:16px; height:16px; border-radius:50%;
+    background:radial-gradient(circle, rgba(224,187,132,0.35), transparent 70%);
+    transform:translate(-50%,-50%);
+    filter:blur(3px);
+    animation:penMove 2.1s cubic-bezier(.65,.02,.28,1) 0.12s forwards;
+  }
+  @keyframes penMove{
+    0%{ left:2%; opacity:1; transform:translate(-50%,-50%) translateY(6px); }
+    22%{ left:22%; transform:translate(-50%,-50%) translateY(-7px); }
+    30%{ left:34%; transform:translate(-50%,-50%) translateY(-9px); }
+    48%{ left:48%; transform:translate(-50%,-50%) translateY(3px); }
+    55%{ left:58%; transform:translate(-50%,-50%) translateY(7px); }
+    72%{ left:76%; transform:translate(-50%,-50%) translateY(-6px); }
+    80%{ left:88%; transform:translate(-50%,-50%) translateY(-5px); }
+    94%{ left:97%; opacity:1; transform:translate(-50%,-50%) translateY(-3px); }
+    100%{ left:99%; opacity:0; transform:translate(-50%,-50%) translateY(0); }
+  }
 
   .signature-underline{
-    position:absolute; left:2%; right:2%; bottom:-6px; height:1px;
-    background:var(--gold); transform-origin:left; transform:scaleX(0);
-    animation:underlineIn 0.7s ease 2.1s forwards;
+    position:absolute; left:6%; right:6%; bottom:2px; height:14px;
+    transform-origin:left; transform:scaleX(0);
+    animation:underlineIn 0.8s cubic-bezier(.34,1.4,.64,1) 2.55s forwards;
   }
+  .signature-underline svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .signature-underline path{ stroke:var(--gold); stroke-width:1.5; fill:none; stroke-linecap:round; }
   @keyframes underlineIn{ to{ transform:scaleX(1); } }
 
   .intro-sub{
-    margin-top:22px; text-align:center;
+    margin-top:16px; text-align:center;
     font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase;
     color:rgba(236,229,214,0.45);
-    opacity:0; animation:introFade 0.8s 2.4s forwards;
+    opacity:0; animation:introFade 0.8s 2.8s forwards;
   }
   @keyframes introFade{ from{opacity:0;} to{opacity:1;} }
 
   @media (prefers-reduced-motion: reduce){
-    .signature path{ animation:none !important; stroke-dashoffset:0 !important; }
+    .signature-text{ animation:none !important; clip-path:inset(0 0 0 0) !important; filter:drop-shadow(0 2px 14px rgba(224,187,132,0.28)) !important; }
+    .pen-tip, .pen-trail, .ink-touch, .signature-wrap::before{ display:none !important; }
     .signature-underline{ animation:none !important; transform:scaleX(1) !important; }
     .intro-sub{ animation:none !important; opacity:1 !important; }
   }
@@ -236,6 +328,7 @@
   }
   .btn-solid{ background:var(--gold); color:var(--ink); }
   .btn-solid:hover{ background:var(--gold-bright); transform:translateY(-3px); box-shadow:0 12px 34px -10px rgba(176,141,87,0.65); }
+  .btn-solid:active{ transform:translateY(0) scale(0.97); box-shadow:0 6px 16px -8px rgba(176,141,87,0.5); }
   .btn::before{
     content:""; position:absolute; inset:0; border-radius:2px;
     background:radial-gradient(120px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.18), transparent 60%);
@@ -244,6 +337,7 @@
   .btn:hover::before{ opacity:1; }
   .btn-ghost{ border:1px solid var(--line); }
   .btn-ghost:hover{ border-color:var(--gold); color:var(--gold-bright); transform:translateY(-3px); }
+  .btn-ghost:active{ transform:translateY(0) scale(0.97); }
 
   .razor-line{
     position:absolute; right:6%; top:50%; transform:translateY(-50%);
@@ -263,9 +357,10 @@
 
   /* ---------- SECTION GENERIC ---------- */
   section{ padding:130px 6%; position:relative; }
+  @media(max-width:760px){ section{ padding:90px 6%; } }
   .eyebrow{ font-size:0.75rem; letter-spacing:0.32em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:block; }
-  h2{ font-family:'Bebas Neue',sans-serif; font-size:clamp(2.4rem,5vw,4.2rem); letter-spacing:0.01em; margin-bottom:20px; position:relative; }
-  .lead{ font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:rgba(236,229,214,0.75); max-width:600px; }
+  h2{ font-family:'Bebas Neue',sans-serif; font-size:clamp(2.4rem,5vw,4.2rem); line-height:0.95; letter-spacing:0.01em; margin-bottom:20px; position:relative; }
+  .lead{ font-family:'Cormorant Garamond',serif; font-size:1.25rem; line-height:1.6; color:rgba(236,229,214,0.75); max-width:600px; }
   .reveal{ opacity:0; transform:translateY(34px); transition:opacity 0.9s cubic-bezier(.16,1,.3,1), transform 0.9s cubic-bezier(.16,1,.3,1); }
   .reveal.in{ opacity:1; transform:translateY(0); }
   .gallery-grid .reveal:nth-child(1){ transition-delay:0s; }
@@ -275,6 +370,12 @@
   .t-grid .reveal:nth-child(1){ transition-delay:0s; }
   .t-grid .reveal:nth-child(2){ transition-delay:0.12s; }
   .t-grid .reveal:nth-child(3){ transition-delay:0.24s; }
+  .why-grid .reveal:nth-child(1){ transition-delay:0s; }
+  .why-grid .reveal:nth-child(2){ transition-delay:0.08s; }
+  .why-grid .reveal:nth-child(3){ transition-delay:0.16s; }
+  .why-grid .reveal:nth-child(4){ transition-delay:0.24s; }
+  .why-grid .reveal:nth-child(5){ transition-delay:0.32s; }
+  .why-grid .reveal:nth-child(6){ transition-delay:0.40s; }
 
   /* ---------- SERVICES ---------- */
   .services{ background:var(--ink2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
@@ -291,10 +392,32 @@
     transition:width 0.4s ease;
   }
   .svc-row:hover .svc-name::after{ width:100%; }
-  .svc-desc{ font-family:'Cormorant Garamond',serif; font-style:italic; color:rgba(236,229,214,0.5); font-size:0.95rem; margin-top:4px; }
+  .svc-desc{ font-family:'Cormorant Garamond',serif; font-style:italic; color:rgba(236,229,214,0.6); font-size:0.95rem; line-height:1.5; margin-top:4px; }
   .svc-price{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--gold-bright); white-space:nowrap; padding-left:20px; }
   .svc-price.tbd{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1rem; color:rgba(236,229,214,0.55); }
   .svc-note{ margin-top:26px; font-size:0.85rem; color:rgba(236,229,214,0.45); }
+
+  /* ---------- WHY CHOOSE ---------- */
+  .why{ background:var(--ink2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .why-grid{
+    margin-top:56px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
+  }
+  @media(max-width:860px){ .why-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .why-grid{grid-template-columns:1fr;} }
+  .why-card{
+    background:var(--ink); padding:34px 30px; position:relative;
+    transition:background 0.4s ease, transform 0.4s ease;
+  }
+  .why-card:hover{ background:rgba(176,141,87,0.05); transform:translateY(-3px); }
+  .why-num{
+    font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:0.15em;
+    color:var(--gold); opacity:0.7; display:block; margin-bottom:14px;
+  }
+  .why-title{ font-size:1.05rem; margin-bottom:8px; }
+  .why-desc{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.98rem;
+    color:rgba(236,229,214,0.6); line-height:1.5;
+  }
 
   /* ---------- ABOUT ---------- */
   .about{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:70px; align-items:center; perspective:1000px; }
@@ -303,14 +426,31 @@
     aspect-ratio:4/5; border:1px solid var(--line); position:relative;
     background:linear-gradient(160deg, #1e1a13, #0b0a08 70%);
     display:flex; align-items:center; justify-content:center; overflow:hidden;
+    transition:transform 0.3s ease; transform-style:preserve-3d;
   }
+  .about-visual img{
+    width:100%; height:100%; object-fit:cover; object-position:top center;
+    filter:grayscale(0.15) contrast(1.05);
+    opacity:0; transition:opacity 0.6s ease;
+  }
+  .about-visual.loaded img{ opacity:1; }
   .about-visual::before{
-    content:"E"; font-family:'Bebas Neue',sans-serif; font-size:22rem;
-    color:rgba(176,141,87,0.09); line-height:1;
+    content:""; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(100deg, transparent 30%, rgba(224,187,132,0.09) 50%, transparent 70%);
+    background-size:200% 100%;
+    animation:shimmer 1.6s ease-in-out infinite;
+    opacity:1; transition:opacity 0.4s ease;
+    pointer-events:none;
+  }
+  .about-visual.loaded::before{ opacity:0; animation:none; }
+  @keyframes shimmer{ 0%{ background-position:200% 0; } 100%{ background-position:-200% 0; } }
+  @media (prefers-reduced-motion: reduce){
+    .about-visual img{ opacity:1; transition:none; }
+    .about-visual::before{ display:none; }
   }
   .about-visual::after{
-    content:""; position:absolute; inset:0;
-    background:conic-gradient(from 0deg, transparent, rgba(176,141,87,0.08), transparent 30%);
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:conic-gradient(from 0deg, transparent, rgba(176,141,87,0.10), transparent 30%);
     animation:slowspin 12s linear infinite;
   }
   @keyframes slowspin{ to{ transform:rotate(360deg); } }
@@ -335,6 +475,29 @@
     opacity:0.7; transition:opacity 0.5s ease, transform 0.6s ease;
   }
   .g-item:hover::before{ opacity:1; transform:scale(1.3); }
+  .g-item img{ width:100%; height:100%; object-fit:cover; }
+
+  .ba-card{
+    margin-top:2px; display:flex; border:1px solid var(--line); overflow:hidden;
+    aspect-ratio:16/11;
+  }
+  @media(max-width:700px){ .ba-card{ aspect-ratio:16/18; } }
+  .ba-half{
+    flex:1; position:relative; display:flex; align-items:flex-end; padding:18px;
+    background:linear-gradient(150deg,#221c14,#0b0a08);
+  }
+  .ba-half img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; }
+  .ba-half::after{
+    content:""; position:absolute; inset:0; z-index:0;
+    background:linear-gradient(to top, rgba(11,10,8,0.75), transparent 45%);
+    pointer-events:none;
+  }
+  .ba-tag{
+    position:relative; z-index:1; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:rgba(236,229,214,0.5); border:1px solid var(--line); padding:6px 14px; border-radius:20px;
+  }
+  .ba-tag.gold{ color:var(--gold-bright); border-color:var(--gold); }
+  .ba-divider{ width:2px; background:var(--gold); }
 
   /* ---------- MARQUEE ---------- */
   .marquee-wrap{
@@ -418,9 +581,6 @@
   nav a.active:not(.nav-cta){ opacity:1; color:var(--gold-bright); }
   nav a.active:not(.nav-cta)::after{ right:0; }
 
-  /* ---------- ABOUT TILT ---------- */
-  .about-visual{ transition:transform 0.3s ease; transform-style:preserve-3d; }
-
   /* ---------- SCROLL PROGRESS ---------- */
   #progress{
     position:fixed; top:0; left:0; height:2px; width:0%;
@@ -486,7 +646,10 @@
     font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem;
     margin:18px 0; color:rgba(236,229,214,0.85); line-height:1.5;
   }
-  .t-name{ font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.55; }
+  .t-name{ font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.65; }
+  .t-empty{ border:1px dashed var(--line); }
+  .t-empty .t-stars{ opacity:0.3; }
+  .t-empty .t-quote{ opacity:0.55; font-style:italic; }
 
   /* ---------- HOURS ---------- */
   .hours-wrap{
@@ -500,16 +663,41 @@
     margin-bottom:6px;
   }
   .status-pill .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold-bright); animation:blinkDot 1.6s ease-in-out infinite; flex-shrink:0; }
-  .map-frame{
-    aspect-ratio:4/3; border:1px solid var(--line); position:relative; overflow:hidden;
-    background:linear-gradient(160deg,#1a1712,#0b0a08);
+  .location-card{
+    border:1px solid var(--line); padding:40px 34px; position:relative;
+    background:linear-gradient(160deg, rgba(176,141,87,0.05), transparent 70%);
   }
-  .map-frame iframe{ width:100%; height:100%; border:0; filter:grayscale(1) invert(0.92) contrast(0.9); }
-  .map-pin{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-100%);
-    width:14px; height:14px; background:var(--gold-bright); border-radius:50% 50% 50% 0;
-    transform-origin:bottom right;
-    box-shadow:0 0 0 4px rgba(224,187,132,0.15);
+  .location-icon{ color:var(--gold-bright); font-size:1rem; display:block; margin-bottom:16px; }
+  .location-title{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.03em; margin-bottom:14px; }
+  .location-desc{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem;
+    color:rgba(236,229,214,0.7); line-height:1.6;
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-grid{
+    margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:40px;
+    position:relative;
+  }
+  @media(max-width:860px){ .process-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .process-grid{grid-template-columns:1fr;} }
+  .process-step{ position:relative; padding-top:10px; }
+  .process-step:not(:last-child)::after{
+    content:""; position:absolute; top:24px; left:calc(100% + 8px); width:calc(100% - 16px);
+    height:1px; background:repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 12px);
+    opacity:0.5;
+  }
+  @media(max-width:860px){ .process-step::after{ display:none; } }
+  .process-num{
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--gold);
+    font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--gold-bright);
+    margin-bottom:20px;
+  }
+  .process-title{ font-size:1.05rem; margin-bottom:8px; }
+  .process-desc{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem;
+    color:rgba(236,229,214,0.6); line-height:1.5;
   }
 </style>
 </head>
@@ -528,32 +716,34 @@
 
 <div id="intro" aria-hidden="true">
   <div class="signature-wrap">
-    <svg class="signature" viewBox="0 0 480 140" xmlns="http://www.w3.org/2000/svg">
-      <path pathLength="1" d="M40,110 C40,60 40,35 75,35 C95,35 100,45 100,52 C100,58 88,55 72,55 C55,55 44,63 44,82 C44,100 56,112 78,112 C92,112 100,107 103,101"/>
-      <path pathLength="1" d="M130,20 C130,20 122,95 122,118 C122,128 128,130 134,126"/>
-      <path pathLength="1" d="M150,58 L150,112"/>
-      <path pathLength="1" d="M150,40 L151.5,41.5"/>
-      <path pathLength="1" d="M175,65 C192,58 198,68 186,76 C174,84 168,92 180,100 C192,108 202,103 205,95"/>
-      <path pathLength="1" d="M225,95 C225,72 248,66 253,82 C256,93 236,93 227,87 C219,82 224,110 241,110 C249,110 254,107 256,102"/>
-      <path pathLength="1" d="M280,58 L280,112"/>
-      <path pathLength="1" d="M280,40 L281.5,41.5"/>
-    </svg>
-    <div class="signature-underline"></div>
+    <div class="ink-touch"></div>
+    <div class="signature-text">Elisei</div>
+    <div class="pen-trail"></div>
+    <div class="pen-tip"></div>
+    <div class="signature-underline">
+      <svg viewBox="0 0 200 14" preserveAspectRatio="none">
+        <path d="M2,4 C40,12 80,0 100,6 C130,14 165,2 198,7"/>
+      </svg>
+    </div>
   </div>
   <div class="intro-sub">Elisei Barber · Iași</div>
 </div>
 
 <header>
   <div class="brand">ELISEI <span>·</span> BARBER</div>
-  <nav class="nav-links" id="navLinks">
+  <nav class="nav-links" id="navLinks" aria-label="Meniu principal">
     <a href="#servicii">Servicii</a>
     <a href="#despre">Despre</a>
+    <a href="#dece">De ce eu</a>
     <a href="#galerie">Galerie</a>
+    <a href="#proces">Programare</a>
     <a href="#program">Program</a>
     <a href="tel:+40759895155" class="nav-cta" aria-label="Sună la Elisei Barber">Programează-te</a>
   </nav>
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </header>
+
+<main>
 
 <section class="hero">
   <div class="razor-line" aria-hidden="true"></div>
@@ -587,48 +777,93 @@
         <div class="svc-name">Tuns + barbă</div>
         <div class="svc-desc">Contur, definire și îngrijire completă a bărbii</div>
       </div>
-      <div class="svc-price tbd">La salon</div>
+      <div class="svc-price tbd">La stabilire</div>
     </div>
     <div class="svc-row reveal">
       <div>
         <div class="svc-name">Bărbierit clasic</div>
         <div class="svc-desc">Cu prosop cald și lamă, stil old-school</div>
       </div>
-      <div class="svc-price tbd">La salon</div>
-    </div>
-    <div class="svc-row reveal">
-      <div>
-        <div class="svc-name">Tuns copii</div>
-        <div class="svc-desc">Răbdare și atenție, pentru cei mici</div>
-      </div>
-      <div class="svc-price tbd">La salon</div>
+      <div class="svc-price tbd">La stabilire</div>
     </div>
   </div>
-  <p class="svc-note reveal">Prețurile exacte pentru celelalte servicii se confirmă telefonic sau la salon.</p>
+  <p class="svc-note reveal">Prețurile exacte pentru celelalte servicii se confirmă telefonic, în funcție de cerințe.</p>
+</section>
+
+<section class="why" id="dece">
+  <span class="eyebrow reveal">De ce eu</span>
+  <h2 class="reveal">De ce să mă alegi?</h2>
+  <p class="lead reveal">Fiind independent, pot oferi ceva ce un salon aglomerat nu poate: timp, atenție și consecvență.</p>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <span class="why-num">01</span>
+      <div class="why-title">Atenție 100% dedicată</div>
+      <div class="why-desc">Un singur client la un moment dat — nicio grabă, nicio programare suprapusă.</div>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-num">02</span>
+      <div class="why-title">Programări flexibile</div>
+      <div class="why-desc">Ne adaptăm programul tău, nu invers — inclusiv seara sau weekend, în funcție de disponibilitate.</div>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-num">03</span>
+      <div class="why-title">Atmosferă relaxată</div>
+      <div class="why-desc">Fără zgomot de salon aglomerat — doar o discuție liniștită și o freză făcută cu calm.</div>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-num">04</span>
+      <div class="why-title">Tunsori personalizate</div>
+      <div class="why-desc">Fiecare stil e ales pentru forma feței și textura părului tău, nu după un șablon fix.</div>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-num">05</span>
+      <div class="why-title">Atenție la detalii</div>
+      <div class="why-desc">De la conturul din spatele urechii până la ultimul fir — nimic nu e lăsat la voia întâmplării.</div>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-num">06</span>
+      <div class="why-title">Comunicare ușoară</div>
+      <div class="why-desc">Un mesaj pe WhatsApp sau un telefon — răspund direct, fără intermediari sau recepție.</div>
+    </div>
+  </div>
 </section>
 
 <section class="about" id="despre">
   <div class="reveal">
     <span class="eyebrow">Despre Elisei</span>
-    <h2>Meserie învățată<br>cu mâna, nu din grabă</h2>
-    <p class="lead">Cu 3 ani de experiență în spate, Elisei a transformat freza într-o meserie de precizie: fiecare tunsoare e gândită pentru tine, nu pentru viteză. Atenție la detalii, de la primul contur până la ultima ajustare, într-un spațiu unde te simți respectat, nu grăbit.</p>
+    <h2>Un singur client<br>la un moment dat</h2>
+    <p class="lead">Elisei este frizer independent — nu conduce un salon, ci lucrează individual, cu atenție completă dedicată fiecărui client. Cu 3 ani de experiență, a ales să lucreze exclusiv pe bază de programare, ca fiecare tunsoare să se facă în liniște, fără grabă și fără alți clienți în așteptare.</p>
+    <p class="lead" style="margin-top:16px;">Această alegere înseamnă o relație mai apropiată: îți ține minte stilul, preferințele și ce a funcționat data trecută — și ajustează fiecare vizită în funcție de asta.</p>
     <div class="stat-row">
       <div class="stat"><b>3</b><span>Ani experiență</span></div>
       <div class="stat"><b>300+</b><span>Clienți mulțumiți</span></div>
     </div>
   </div>
-  <div class="about-visual reveal" aria-hidden="true"></div>
+  <div class="about-visual reveal">
+    <img src="elisei-photo.jpg" alt="Elisei, frizer independent din Iași" loading="lazy" decoding="async" width="900" height="1243" onload="this.closest('.about-visual').classList.add('loaded')">
+  </div>
 </section>
 
 <section id="galerie">
   <span class="eyebrow reveal">Portofoliu</span>
   <h2 class="reveal">Galerie</h2>
-  <p class="lead reveal">O parte din munca zilnică — mai multe, live, pe Instagram și TikTok.</p>
+  <p class="lead reveal">O parte din munca lui Elisei — transformări reale, tunse cu atenție la detalii.</p>
   <div class="gallery-grid">
-    <div class="g-item reveal"><span>Fade clasic</span></div>
-    <div class="g-item reveal"><span>Barbă definită</span></div>
-    <div class="g-item reveal"><span>Skin fade</span></div>
-    <div class="g-item reveal"><span>Stil old-school</span></div>
+    <div class="g-item reveal"><img src="gallery-1.jpg" alt="Tunsoare cu breton texturat și fade" loading="lazy" decoding="async"></div>
+    <div class="g-item reveal"><img src="gallery-2.jpg" alt="Tunsoare scurtă cu skin fade" loading="lazy" decoding="async"></div>
+    <div class="g-item reveal"><img src="gallery-3.jpg" alt="Fade cu model liniar" loading="lazy" decoding="async"></div>
+    <div class="g-item reveal"><img src="gallery-4.jpg" alt="Tunsoare texturată cu low fade" loading="lazy" decoding="async"></div>
+  </div>
+  <div class="ba-card reveal">
+    <div class="ba-half">
+      <img src="ba-before.jpg" alt="Înainte de tunsoare" loading="lazy" decoding="async">
+      <span class="ba-tag">Înainte</span>
+    </div>
+    <div class="ba-divider" aria-hidden="true"></div>
+    <div class="ba-half">
+      <img src="ba-after.jpg" alt="După tunsoare" loading="lazy" decoding="async">
+      <span class="ba-tag gold">După</span>
+    </div>
   </div>
 </section>
 
@@ -645,7 +880,39 @@
         <a href="https://wa.me/40759895155" target="_blank" rel="noopener" class="btn btn-ghost">WhatsApp</a>
       </div>
     </div>
-    <div class="map-frame reveal" aria-hidden="true"><div class="map-pin"></div></div>
+    <div class="location-card reveal">
+      <span class="location-icon">◆</span>
+      <div class="location-title">Locația se stabilește la programare</div>
+      <p class="location-desc">Lucrez atât într-un salon partener din Iași, cât și în regim privat, în funcție de disponibilitate. Adresa exactă ți-o transmit după ce confirmăm ziua și ora.</p>
+    </div>
+  </div>
+</section>
+
+<section id="proces">
+  <span class="eyebrow reveal">Cum funcționează</span>
+  <h2 class="reveal">Procesul unei programări</h2>
+  <p class="lead reveal">Simplu, direct, fără aplicații sau formulare complicate.</p>
+  <div class="process-grid">
+    <div class="process-step reveal">
+      <span class="process-num">1</span>
+      <div class="process-title">Contactezi</div>
+      <div class="process-desc">Telefonic sau pe WhatsApp — oricare îți e mai la îndemână.</div>
+    </div>
+    <div class="process-step reveal">
+      <span class="process-num">2</span>
+      <div class="process-title">Stabilim ziua și ora</div>
+      <div class="process-desc">Găsim un interval care se potrivește ambilor, cât mai repede posibil.</div>
+    </div>
+    <div class="process-step reveal">
+      <span class="process-num">3</span>
+      <div class="process-title">Primești confirmarea</div>
+      <div class="process-desc">Inclusiv locația exactă unde ne vedem — salon partener sau privat.</div>
+    </div>
+    <div class="process-step reveal">
+      <span class="process-num">4</span>
+      <div class="process-title">Vii la programare</div>
+      <div class="process-desc">Restul e treaba mea — te aștept pregătit, la ora stabilită.</div>
+    </div>
   </div>
 </section>
 
@@ -659,7 +926,7 @@
 <section class="social">
   <span class="eyebrow reveal">Rămâi conectat</span>
   <h2 class="reveal">Urmărește-mă</h2>
-  <p class="lead reveal" style="margin:0 auto;">Videoclipuri din salon, transformări și programul zilei — direct pe rețele.</p>
+  <p class="lead reveal" style="margin:0 auto;">Videoclipuri din timpul lucrului, transformări și disponibilitate — direct pe rețele.</p>
   <div class="social-links">
     <a href="https://www.instagram.com/elisei.damian.90?igsh=MTdkbXlidW02bjNpNQ==" target="_blank" rel="noopener" class="social-card reveal" aria-label="Instagram Elisei Barber">
       <div class="plat">Instagram</div>
@@ -673,23 +940,29 @@
 </section>
 
 <section class="testimonials">
-  <span class="eyebrow reveal">Clienți</span>
-  <h2 class="reveal">Ce spun cei care au trecut pe scaun</h2>
+  <span class="eyebrow reveal">Recenzii</span>
+  <h2 class="reveal">Ce spun clienții</h2>
+  <p class="lead reveal">Recenziile reale de la clienți vor apărea aici pe măsură ce sunt adăugate.</p>
   <div class="t-grid">
-    <div class="t-card reveal">
+    <!-- REVIEW SLOT — pentru a adăuga o recenzie reală, înlocuiește conținutul din interiorul unui .t-card:
+    <div class="t-stars">★★★★★</div>
+    <p class="t-quote">Textul recenziei aici.</p>
+    <div class="t-name">— Numele clientului</div>
+    -->
+    <div class="t-card reveal t-empty">
       <div class="t-stars">★★★★★</div>
-      <p class="t-quote">Cea mai bună freză din Iași, de departe. Elisei chiar ascultă ce vrei și explică fiecare pas.</p>
-      <div class="t-name">— Andrei M.</div>
+      <p class="t-quote">Loc pregătit pentru prima recenzie reală.</p>
+      <div class="t-name">În curând</div>
     </div>
-    <div class="t-card reveal">
+    <div class="t-card reveal t-empty">
       <div class="t-stars">★★★★★</div>
-      <p class="t-quote">Am mers la Elisei recomandat de un prieten. Atmosferă relaxată, atenție la detalii — am devenit client fix.</p>
-      <div class="t-name">— Vlad T.</div>
+      <p class="t-quote">Loc pregătit pentru o recenzie reală.</p>
+      <div class="t-name">În curând</div>
     </div>
-    <div class="t-card reveal">
+    <div class="t-card reveal t-empty">
       <div class="t-stars">★★★★★</div>
-      <p class="t-quote">Programare ușoară direct pe WhatsApp, rezultat exact ca în poze. Recomand cu încredere.</p>
-      <div class="t-name">— Cristi P.</div>
+      <p class="t-quote">Loc pregătit pentru o recenzie reală.</p>
+      <div class="t-name">În curând</div>
     </div>
   </div>
 </section>
@@ -706,12 +979,19 @@
   <p class="addr reveal">Iași, România</p>
 </section>
 
+</main>
+
 <footer>
   <div>© 2026 Elisei Barber</div>
   <div>Iași, România</div>
 </footer>
 
 <script>
+  document.addEventListener('contextmenu', (e)=> e.preventDefault());
+  document.addEventListener('copy', (e)=> e.preventDefault());
+  document.addEventListener('cut', (e)=> e.preventDefault());
+  document.addEventListener('selectstart', (e)=> e.preventDefault());
+
   /* generate ambient dust particles */
   const dustWrap = document.getElementById('dust');
   if(dustWrap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -733,7 +1013,7 @@
     }
   }
 
-  setTimeout(()=>{ document.getElementById('intro').classList.add('hide'); }, 3400);
+  setTimeout(()=>{ document.getElementById('intro').classList.add('hide'); }, 3900);
 
   /* custom cursor */
   const dot = document.querySelector('.cursor-dot');
@@ -855,9 +1135,9 @@
   const spyIO = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
-        navAnchors.forEach(a=>a.classList.remove('active'));
+        navAnchors.forEach(a=>{ a.classList.remove('active'); a.removeAttribute('aria-current'); });
         const match = document.querySelector('nav a[href="#'+entry.target.id+'"]');
-        if(match) match.classList.add('active');
+        if(match){ match.classList.add('active'); match.setAttribute('aria-current','page'); }
       }
     });
   }, {threshold:0.4, rootMargin:'-80px 0px -60% 0px'});
@@ -865,7 +1145,7 @@
 
   /* tilt on about visual */
   const tiltEl = document.querySelector('.about-visual');
-  if(tiltEl){
+  if(tiltEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     tiltEl.addEventListener('mousemove', (e)=>{
       const r = tiltEl.getBoundingClientRect();
       const px = (e.clientX - r.left)/r.width - 0.5;
