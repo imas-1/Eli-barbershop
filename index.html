@@ -148,7 +148,7 @@
 
   /* ---------- INTRO ---------- */
   #intro{
-    position:fixed; inset:0; z-index:9999;
+    position:fixed; inset:0; z-index:9999; overflow:hidden;
     background:var(--ink);
     display:flex; align-items:center; justify-content:center;
     flex-direction:column;
@@ -158,7 +158,23 @@
   @keyframes introFallbackHide{ to{ opacity:0; visibility:hidden; pointer-events:none; } }
   #intro.hide{ opacity:0; visibility:hidden; pointer-events:none; }
 
-  .signature-wrap{ position:relative; display:inline-block; padding:20px 10px; }
+  /* ---------- SIGNATURE RAZOR-CUT REVEAL ---------- */
+  .razor-panel{
+    position:absolute; left:0; right:0; height:51%; background:var(--ink); z-index:0;
+    will-change:transform;
+  }
+  .razor-panel.top{ top:0; }
+  .razor-panel.bottom{ bottom:0; }
+  .razor-line{
+    position:absolute; top:50%; left:0; right:0; height:2px; z-index:3;
+    transform:translateY(-50%) scaleX(0);
+    background:linear-gradient(90deg, transparent, var(--gold-bright) 20%, #fff 50%, var(--gold-bright) 80%, transparent);
+    box-shadow:0 0 24px 4px rgba(224,187,132,0.65), 0 0 60px 10px rgba(224,187,132,0.25);
+    opacity:0; pointer-events:none;
+  }
+  #intro.no-cut .razor-panel, #intro.no-cut .razor-line{ display:none; }
+
+  .signature-wrap{ position:relative; z-index:2; display:inline-block; padding:20px 10px; }
   .signature-wrap::before{
     content:""; position:absolute; inset:-30% -10%; z-index:-1; border-radius:50%;
     background:radial-gradient(ellipse at center, rgba(224,187,132,0.16), transparent 70%);
@@ -243,6 +259,7 @@
   @keyframes underlineIn{ to{ transform:scaleX(1); } }
 
   .intro-sub{
+    position:relative; z-index:2;
     margin-top:16px; text-align:center;
     font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase;
     color:rgba(236,229,214,0.45);
@@ -475,29 +492,88 @@
     opacity:0.7; transition:opacity 0.5s ease, transform 0.6s ease;
   }
   .g-item:hover::before{ opacity:1; transform:scale(1.3); }
-  .g-item img{ width:100%; height:100%; object-fit:cover; }
+  .g-item img{ width:100%; height:100%; object-fit:cover; cursor:zoom-in; }
+
+  /* ---------- LIGHTBOX ---------- */
+  #lightbox{
+    position:fixed; inset:0; z-index:10000;
+    background:rgba(6,5,4,0.94);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity 0.35s ease, visibility 0.35s ease;
+    padding:6vh 5vw;
+  }
+  #lightbox.open{ opacity:1; visibility:visible; pointer-events:auto; }
+  #lightbox img{
+    max-width:100%; max-height:88vh; object-fit:contain;
+    border:1px solid var(--line);
+    box-shadow:0 30px 80px -20px rgba(0,0,0,0.7);
+    transform:scale(0.94); transition:transform 0.35s cubic-bezier(.16,1,.3,1);
+    cursor:default;
+  }
+  #lightbox.open img{ transform:scale(1); }
+  .lightbox-close{
+    position:absolute; top:22px; right:22px; width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--line); background:rgba(11,10,8,0.7); backdrop-filter:blur(6px);
+    color:var(--bone); font-size:1.3rem; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:border-color 0.3s;
+  }
+  .lightbox-close:hover{ border-color:var(--gold); color:var(--gold-bright); }
+  @media (prefers-reduced-motion: reduce){
+    #lightbox, #lightbox img{ transition:none !important; }
+  }
 
   .ba-card{
-    margin-top:2px; display:flex; border:1px solid var(--line); overflow:hidden;
-    aspect-ratio:16/11;
+    margin-top:2px; position:relative; overflow:hidden; border:1px solid var(--line);
+    aspect-ratio:16/11; cursor:ew-resize; touch-action:pan-y;
   }
   @media(max-width:700px){ .ba-card{ aspect-ratio:16/18; } }
-  .ba-half{
-    flex:1; position:relative; display:flex; align-items:flex-end; padding:18px;
-    background:linear-gradient(150deg,#221c14,#0b0a08);
-  }
-  .ba-half img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; }
-  .ba-half::after{
-    content:""; position:absolute; inset:0; z-index:0;
-    background:linear-gradient(to top, rgba(11,10,8,0.75), transparent 45%);
-    pointer-events:none;
+  .ba-layer{ position:absolute; inset:0; }
+  .ba-layer img{ width:100%; height:100%; object-fit:cover; object-position:top center; }
+  .ba-before-wrap{ position:absolute; inset:0; clip-path:inset(0 0% 0 0); }
+  .ba-before-wrap.dragging{ transition:none; }
+  .ba-before-wrap:not(.dragging){ transition:clip-path 0.25s ease; }
+  .ba-layer::after{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:linear-gradient(to top, rgba(11,10,8,0.7), transparent 45%);
   }
   .ba-tag{
-    position:relative; z-index:1; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
-    color:rgba(236,229,214,0.5); border:1px solid var(--line); padding:6px 14px; border-radius:20px;
+    position:absolute; bottom:18px; z-index:1;
+    font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:rgba(236,229,214,0.7); border:1px solid var(--line); padding:6px 14px; border-radius:20px;
+    background:rgba(11,10,8,0.5); backdrop-filter:blur(4px);
+    pointer-events:none;
   }
-  .ba-tag.gold{ color:var(--gold-bright); border-color:var(--gold); }
-  .ba-divider{ width:2px; background:var(--gold); }
+  .ba-tag.left{ left:18px; }
+  .ba-tag.right{ right:18px; color:var(--gold-bright); border-color:var(--gold); }
+  .ba-handle{
+    position:absolute; top:0; bottom:0; left:100%; width:0; z-index:2;
+    transform:translateX(-50%);
+    display:flex; align-items:center; justify-content:center;
+    cursor:ew-resize;
+  }
+  .ba-handle::before{
+    content:""; position:absolute; top:0; bottom:0; left:50%; width:2px;
+    background:var(--gold); transform:translateX(-50%);
+    box-shadow:0 0 10px rgba(224,187,132,0.5);
+  }
+  .ba-handle-grip{
+    position:relative; z-index:1; width:42px; height:42px; border-radius:50%;
+    background:var(--gold-bright); color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; box-shadow:0 6px 18px -6px rgba(0,0,0,0.6);
+  }
+  .ba-hint{
+    margin-top:16px; text-align:center;
+    font-size:0.78rem; letter-spacing:0.08em; color:rgba(236,229,214,0.5);
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .ba-hint svg{ width:16px; height:16px; animation:hintSlide 1.6s ease-in-out infinite; }
+  @keyframes hintSlide{ 0%,100%{ transform:translateX(0); opacity:0.6; } 50%{ transform:translateX(-5px); opacity:1; } }
+  @media (prefers-reduced-motion: reduce){
+    .ba-before-wrap{ transition:none !important; }
+    .ba-hint svg{ animation:none !important; }
+  }
 
   /* ---------- MARQUEE ---------- */
   .marquee-wrap{
@@ -715,6 +791,8 @@
 <div class="vignette" aria-hidden="true"></div>
 
 <div id="intro" aria-hidden="true">
+  <div class="razor-panel top" id="razorTop"></div>
+  <div class="razor-panel bottom" id="razorBottom"></div>
   <div class="signature-wrap">
     <div class="ink-touch"></div>
     <div class="signature-text">Elisei</div>
@@ -727,6 +805,7 @@
     </div>
   </div>
   <div class="intro-sub">Elisei Barber · Iași</div>
+  <div class="razor-line" id="razorLine"></div>
 </div>
 
 <header>
@@ -840,7 +919,7 @@
     </div>
   </div>
   <div class="about-visual reveal">
-    <img src="elisei-photo.jpeg" alt="Elisei, frizer independent din Iași" loading="lazy" decoding="async" width="900" height="1243" onload="this.closest('.about-visual').classList.add('loaded')">
+    <img src="elisei-photo.jpeg" alt="Elisei, frizer independent din Iași" loading="lazy" decoding="async" width="900" height="1243" onload="onAboutPhotoLoad(this)">
   </div>
 </section>
 
@@ -854,17 +933,25 @@
     <div class="g-item reveal"><img src="gallery-3.jpeg" alt="Fade cu model liniar" loading="lazy" decoding="async"></div>
     <div class="g-item reveal"><img src="gallery-4.jpeg" alt="Tunsoare texturată cu low fade" loading="lazy" decoding="async"></div>
   </div>
-  <div class="ba-card reveal">
-    <div class="ba-half">
-      <img src="ba-before.jpeg" alt="Înainte de tunsoare" loading="lazy" decoding="async">
-      <span class="ba-tag">Înainte</span>
-    </div>
-    <div class="ba-divider" aria-hidden="true"></div>
-    <div class="ba-half">
+  <div class="ba-card reveal" id="baSlider">
+    <div class="ba-layer">
       <img src="ba-after.jpeg" alt="După tunsoare" loading="lazy" decoding="async">
-      <span class="ba-tag gold">După</span>
+      <span class="ba-tag right">După</span>
+    </div>
+    <div class="ba-before-wrap" id="baBeforeWrap">
+      <div class="ba-layer">
+        <img src="ba-before.jpeg" alt="Înainte de tunsoare" loading="lazy" decoding="async">
+        <span class="ba-tag left">Înainte</span>
+      </div>
+    </div>
+    <div class="ba-handle" id="baHandle" role="slider" aria-label="Compară înainte și după — trage stânga-dreapta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" tabindex="0">
+      <div class="ba-handle-grip">↔</div>
     </div>
   </div>
+  <p class="ba-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+    Trage pentru a vedea rezultatul
+  </p>
 </section>
 
 <section id="program">
@@ -986,6 +1073,13 @@
   <div>Iași, România</div>
 </footer>
 
+<div id="lightbox" aria-hidden="true">
+  <div class="lightbox-close" id="lightboxClose" role="button" aria-label="Închide" tabindex="0">✕</div>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
   document.addEventListener('contextmenu', (e)=> e.preventDefault());
   document.addEventListener('copy', (e)=> e.preventDefault());
@@ -1013,7 +1107,43 @@
     }
   }
 
-  setTimeout(()=>{ document.getElementById('intro').classList.add('hide'); }, 3900);
+  /* shared capability check for premium motion effects */
+  const MOTION_OK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !((navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (navigator.deviceMemory && navigator.deviceMemory <= 2))
+    && typeof gsap !== 'undefined';
+  if(MOTION_OK && typeof ScrollTrigger !== 'undefined'){ gsap.registerPlugin(ScrollTrigger); }
+
+  /* ---------- SIGNATURE MOMENT: razor-cut reveal ---------- */
+  (function(){
+    const introEl = document.getElementById('intro');
+    const razorTop = document.getElementById('razorTop');
+    const razorBottom = document.getElementById('razorBottom');
+    const razorLine = document.getElementById('razorLine');
+    const sigWrap = document.querySelector('.signature-wrap');
+    const introSub = document.querySelector('.intro-sub');
+
+    function simpleFallbackHide(){
+      introEl.classList.add('no-cut');
+      setTimeout(()=> introEl.classList.add('hide'), 3900);
+    }
+
+    if(!MOTION_OK){
+      // Accessible / low-power / no-GSAP path: original clean fade, no cut sequence.
+      simpleFallbackHide();
+    } else {
+      // Signature razor-cut reveal, timed to finish right as the signature settles.
+      const tl = gsap.timeline({ delay: 3.9, onComplete(){
+        introEl.classList.add('hide');
+        introEl.style.pointerEvents = 'none';
+      }});
+      tl.to([sigWrap, introSub], { opacity:0, duration:0.28, ease:'power1.out' })
+        .fromTo(razorLine, { scaleX:0, opacity:0 }, { scaleX:1, opacity:1, duration:0.22, ease:'power2.out' }, '<0.02')
+        .to(razorLine, { opacity:0, duration:0.35, ease:'power1.in' }, '>-0.02')
+        .set(introEl, { backgroundColor:'transparent' })
+        .to(razorTop, { yPercent:-100, duration:0.85, ease:'expo.inOut' }, '<')
+        .to(razorBottom, { yPercent:100, duration:0.85, ease:'expo.inOut' }, '<');
+    }
+  })();
 
   /* custom cursor */
   const dot = document.querySelector('.cursor-dot');
@@ -1029,7 +1159,7 @@
       requestAnimationFrame(loop);
     }
     loop();
-    document.querySelectorAll('a, button, .g-item, .social-card, .svc-row').forEach(el=>{
+    document.querySelectorAll('a, button, .g-item, .social-card, .svc-row, .ba-handle, .lightbox-close').forEach(el=>{
       el.addEventListener('mouseenter', ()=>ring.classList.add('big'));
       el.addEventListener('mouseleave', ()=>ring.classList.remove('big'));
     });
@@ -1110,6 +1240,70 @@
     }
   }, {passive:true});
 
+  /* before/after draggable slider */
+  const baSlider = document.getElementById('baSlider');
+  const baBeforeWrap = document.getElementById('baBeforeWrap');
+  const baHandle = document.getElementById('baHandle');
+  if(baSlider && baBeforeWrap && baHandle){
+    let dragging = false;
+    function setBaValue(value){
+      value = Math.max(0, Math.min(100, value));
+      baBeforeWrap.style.clipPath = `inset(0 ${100-value}% 0 0)`;
+      baHandle.style.left = value+'%';
+      baHandle.setAttribute('aria-valuenow', Math.round(value));
+    }
+    function valueFromClientX(clientX){
+      const rect = baSlider.getBoundingClientRect();
+      return ((clientX - rect.left) / rect.width) * 100;
+    }
+    function startDrag(clientX){
+      dragging = true;
+      baBeforeWrap.classList.add('dragging');
+      setBaValue(valueFromClientX(clientX));
+    }
+    function moveDrag(clientX){
+      if(!dragging) return;
+      setBaValue(valueFromClientX(clientX));
+    }
+    function endDrag(){
+      dragging = false;
+      baBeforeWrap.classList.remove('dragging');
+    }
+    baSlider.addEventListener('pointerdown', (e)=>{ baSlider.setPointerCapture(e.pointerId); startDrag(e.clientX); });
+    baSlider.addEventListener('pointermove', (e)=> moveDrag(e.clientX));
+    baSlider.addEventListener('pointerup', endDrag);
+    baSlider.addEventListener('pointercancel', endDrag);
+    baHandle.addEventListener('keydown', (e)=>{
+      const current = parseFloat(baHandle.getAttribute('aria-valuenow')) || 100;
+      if(e.key==='ArrowLeft'){ setBaValue(current-5); e.preventDefault(); }
+      if(e.key==='ArrowRight'){ setBaValue(current+5); e.preventDefault(); }
+      if(e.key==='Home'){ setBaValue(0); e.preventDefault(); }
+      if(e.key==='End'){ setBaValue(100); e.preventDefault(); }
+    });
+  }
+
+  /* lightbox for gallery images */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  function openLightbox(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.g-item img').forEach(img=>{
+    img.addEventListener('click', ()=> openLightbox(img.src, img.alt));
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxClose.addEventListener('keydown', (e)=>{ if(e.key==='Enter') closeLightbox(); });
+  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
@@ -1153,6 +1347,19 @@
       tiltEl.style.transform = `rotateY(${px*8}deg) rotateX(${-py*8}deg)`;
     });
     tiltEl.addEventListener('mouseleave', ()=>{ tiltEl.style.transform = 'rotateY(0) rotateX(0)'; });
+  }
+
+  /* signature moment: the photo "sharpens" into focus as it scrolls in —
+     a quiet echo of the before -> after transformation theme */
+  function onAboutPhotoLoad(img){
+    img.closest('.about-visual').classList.add('loaded');
+    if(!MOTION_OK || typeof ScrollTrigger === 'undefined') return;
+    gsap.set(img, { filter:'blur(7px) grayscale(1) contrast(0.85)' });
+    gsap.to(img, {
+      filter:'blur(0px) grayscale(0.15) contrast(1.05)',
+      ease:'none',
+      scrollTrigger:{ trigger:img.closest('.about-visual'), start:'top 85%', end:'top 45%', scrub:0.6 }
+    });
   }
 </script>
 
