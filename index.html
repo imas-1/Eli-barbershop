@@ -529,7 +529,7 @@
   }
   @media(max-width:700px){ .ba-card{ aspect-ratio:4/3.9; } }
   .ba-layer{ position:absolute; inset:0; }
-  .ba-layer img{ width:100%; height:100%; object-fit:cover; object-position:center 22%; }
+  .ba-layer img{ width:100%; height:100%; object-fit:cover; object-position:center 45%; }
   .ba-before-wrap{ position:absolute; inset:0; clip-path:inset(0 0% 0 0); }
   .ba-before-wrap.dragging{ transition:none; }
   .ba-before-wrap:not(.dragging){ transition:clip-path 0.25s ease; }
@@ -1218,10 +1218,45 @@
     });
   }
 
-  /* header shrink */
+  /* unified scroll handler — header shrink, progress bar, hero parallax,
+     float CTA + back-to-top. Consolidated into a single rAF-throttled
+     listener with a cached viewport height, instead of three separate
+     listeners each re-reading window.innerHeight live (which was
+     fighting with iOS Safari's toolbar-collapse resize and causing
+     the flicker). */
   const headerEl = document.querySelector('header');
+  const heroInner = document.querySelector('.hero');
+  const progressBar = document.getElementById('progress');
+  let viewportH = window.innerHeight;
+  let showThreshold = viewportH * 0.6;
+  window.addEventListener('resize', ()=>{
+    viewportH = window.innerHeight;
+    showThreshold = viewportH * 0.6;
+  }, {passive:true});
+
+  let scrollTicking = false;
+  function onScrollFrame(){
+    const y = window.scrollY;
+    headerEl.classList.toggle('scrolled', y > 40);
+
+    const docH = document.documentElement.scrollHeight - viewportH;
+    progressBar.style.width = (docH > 0 ? (y/docH)*100 : 0) + '%';
+    if(y < viewportH){
+      heroInner.style.transform = 'translateY(' + (y*0.12) + 'px)';
+      heroInner.style.opacity = String(1 - (y/viewportH)*0.7);
+    }
+
+    if(floatCta && toTop){
+      const show = y > showThreshold;
+      floatCta.classList.toggle('show', show);
+      toTop.classList.toggle('show', show);
+    }
+    scrollTicking = false;
+  }
   window.addEventListener('scroll', ()=>{
-    headerEl.classList.toggle('scrolled', window.scrollY > 40);
+    if(scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(onScrollFrame);
   }, {passive:true});
 
   /* burger menu */
@@ -1280,18 +1315,6 @@
   document.addEventListener('touchmove', (e)=>{
     if(e.touches.length > 1){ e.preventDefault(); }
   }, {passive:false});
-
-  const heroInner = document.querySelector('.hero');
-  const progressBar = document.getElementById('progress');
-  window.addEventListener('scroll', ()=>{
-    const y = window.scrollY;
-    const docH = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (docH > 0 ? (y/docH)*100 : 0) + '%';
-    if(y < window.innerHeight){
-      heroInner.style.transform = 'translateY(' + (y*0.12) + 'px)';
-      heroInner.style.opacity = String(1 - (y/window.innerHeight)*0.7);
-    }
-  }, {passive:true});
 
   /* before/after draggable slider */
   const baSlider = document.getElementById('baSlider');
@@ -1368,23 +1391,9 @@
   },{threshold:0.15});
   revealEls.forEach(el=>io.observe(el));
 
-  /* floating CTA + back to top */
+  /* floating CTA + back to top (visibility handled by the unified scroll handler above) */
   const floatCta = document.getElementById('floatCta');
   const toTop = document.getElementById('toTop');
-  const showThreshold = window.innerHeight * 0.6; // cached once — recalculating on every
-  // scroll tick was picking up iOS Safari's toolbar-collapse resize, causing a flicker
-  // right at the boundary as the address bar hid/showed.
-  let floatTicking = false;
-  window.addEventListener('scroll', ()=>{
-    if(floatTicking) return;
-    floatTicking = true;
-    requestAnimationFrame(()=>{
-      const show = window.scrollY > showThreshold;
-      floatCta.classList.toggle('show', show);
-      toTop.classList.toggle('show', show);
-      floatTicking = false;
-    });
-  }, {passive:true});
   toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
   toTop.addEventListener('keydown', (e)=>{ if(e.key==='Enter') window.scrollTo({top:0, behavior:'smooth'}); });
 
