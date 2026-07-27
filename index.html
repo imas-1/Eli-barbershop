@@ -527,9 +527,9 @@
     margin-top:2px; position:relative; overflow:hidden; border:1px solid var(--line);
     aspect-ratio:16/11; cursor:ew-resize; touch-action:pan-y;
   }
-  @media(max-width:700px){ .ba-card{ aspect-ratio:4/3.4; } }
+  @media(max-width:700px){ .ba-card{ aspect-ratio:4/3.9; } }
   .ba-layer{ position:absolute; inset:0; }
-  .ba-layer img{ width:100%; height:100%; object-fit:cover; object-position:top center; }
+  .ba-layer img{ width:100%; height:100%; object-fit:cover; object-position:center 22%; }
   .ba-before-wrap{ position:absolute; inset:0; clip-path:inset(0 0% 0 0); }
   .ba-before-wrap.dragging{ transition:none; }
   .ba-before-wrap:not(.dragging){ transition:clip-path 0.25s ease; }
@@ -636,11 +636,11 @@
     padding:15px 22px; border-radius:40px;
     font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase;
     box-shadow:0 14px 34px -10px rgba(0,0,0,0.55);
-    opacity:0; transform:translateY(20px) scale(0.9);
+    opacity:0; transform:translateY(20px) scale(0.9) translateZ(0);
     transition:opacity 0.5s ease, transform 0.5s ease, background 0.3s;
-    pointer-events:none;
+    pointer-events:none; will-change:transform, opacity;
   }
-  .float-cta.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .float-cta.show{ opacity:1; transform:translateY(0) scale(1) translateZ(0); pointer-events:auto; }
   .float-cta:hover{ background:var(--gold-bright); }
   .float-cta .dot{
     width:8px; height:8px; border-radius:50%; background:var(--ink);
@@ -654,10 +654,11 @@
     border:1px solid var(--line); background:rgba(11,10,8,0.7); backdrop-filter:blur(6px);
     display:flex; align-items:center; justify-content:center;
     color:var(--gold-bright); font-size:1.1rem;
-    opacity:0; transform:translateY(20px); pointer-events:none;
+    opacity:0; transform:translateY(20px) translateZ(0); pointer-events:none;
     transition:opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+    will-change:transform, opacity;
   }
-  .to-top.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .to-top.show{ opacity:1; transform:translateY(0) translateZ(0); pointer-events:auto; }
   .to-top:hover{ border-color:var(--gold); }
   @media(max-width:600px){ .float-cta span.txt{ display:none; } .float-cta{ padding:15px; border-radius:50%; } }
 
@@ -1370,10 +1371,19 @@
   /* floating CTA + back to top */
   const floatCta = document.getElementById('floatCta');
   const toTop = document.getElementById('toTop');
+  const showThreshold = window.innerHeight * 0.6; // cached once — recalculating on every
+  // scroll tick was picking up iOS Safari's toolbar-collapse resize, causing a flicker
+  // right at the boundary as the address bar hid/showed.
+  let floatTicking = false;
   window.addEventListener('scroll', ()=>{
-    const show = window.scrollY > window.innerHeight * 0.6;
-    floatCta.classList.toggle('show', show);
-    toTop.classList.toggle('show', show);
+    if(floatTicking) return;
+    floatTicking = true;
+    requestAnimationFrame(()=>{
+      const show = window.scrollY > showThreshold;
+      floatCta.classList.toggle('show', show);
+      toTop.classList.toggle('show', show);
+      floatTicking = false;
+    });
   }, {passive:true});
   toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
   toTop.addEventListener('keydown', (e)=>{ if(e.key==='Enter') window.scrollTo({top:0, behavior:'smooth'}); });
